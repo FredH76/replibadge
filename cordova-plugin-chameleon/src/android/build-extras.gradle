@@ -1,0 +1,23 @@
+dependencies {
+    compile (name: 'usbserial', ext:'jar')
+    //compile 'com.github.felHR85:UsbSerial:4.5.2'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    //implementation 'com.github.maxieds:ChameleonMiniUSBInterface:BreadCoStable-2018-09-06'
+}
+
+//apply plugin: 'maven'
+repositories {
+    maven { url "https://jitpack.io" }
+    flatDir{
+        dirs 'libs'
+    }
+}
+
+ext.postBuildExtras = {
+    android {
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_7
+            targetCompatibility JavaVersion.VERSION_1_7
+        }
+    }
+}
