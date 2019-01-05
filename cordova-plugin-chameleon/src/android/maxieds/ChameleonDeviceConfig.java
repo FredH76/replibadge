@@ -202,7 +202,7 @@ public class ChameleonDeviceConfig implements ChameleonUSBInterface {
             }
         }
         if (device == null || connection == null) {
-            LibraryLogging.e(TAG, "USB STATUS: Connection to device unavailable.");
+            // LibraryLogging.e(TAG, "USB STATUS: Connection to device unavailable.");
             serialPort = null;
             return serialPort;
         } else {
@@ -210,7 +210,8 @@ public class ChameleonDeviceConfig implements ChameleonUSBInterface {
                     new Intent("com.android.example.USB_PERMISSION"), 0);
             usbManager.requestPermission(device, permIntent);
             if (!usbManager.hasPermission(device)) {
-                LibraryLogging.w(TAG, "ChameleonMiniUSB library does not have permission to access the USB device!");
+                // LibraryLogging.w(TAG, "ChameleonMiniUSB library does not have permission to
+                // access the USB device!");
                 serialPort = null;
                 return serialPort;
             }
@@ -269,7 +270,7 @@ public class ChameleonDeviceConfig implements ChameleonUSBInterface {
             final String summaryPrintStr = summaryByteStr;
             ((Activity) mainApplicationActivity).runOnUiThread(new Runnable() {
                 public void run() {
-                    LibraryLogging.v(TAG, summaryPrintStr);
+                    // LibraryLogging.v(TAG, summaryPrintStr);
                 }
             });
 
@@ -286,7 +287,7 @@ public class ChameleonDeviceConfig implements ChameleonUSBInterface {
             } else if (serialUSBState.compareTo(WAITING_FOR_XMODEM_UPLOAD) == 0) {
                 String strLogData = new String(liveRxData);
                 if (strLogData.length() >= 11 && strLogData.substring(0, 11).equals("110:WAITING")) {
-                    LibraryLogging.d(TAG, "Now ready to upload card data -> STATE:UPLOAD.");
+                    // .d(TAG, "Now ready to upload card data -> STATE:UPLOAD.");
                     serialUSBState = UPLOAD;
                     serialPort.write(new byte[] { BYTE_NAK });
                     XModem.eotSleepHandler.postDelayed(XModem.eotSleepRunnable, 50);
@@ -316,8 +317,9 @@ public class ChameleonDeviceConfig implements ChameleonUSBInterface {
                 }
                 serialUSBState = IDLE;
             } else {
-                LibraryLogging.e(TAG, "UNEXPECTED_RXDATA: [" + Utils.byteArrayToString(liveRxData)
-                        + "] (Current State = " + serialUSBState.name() + ")");
+                // LibraryLogging.e(TAG, "UNEXPECTED_RXDATA: [" +
+                // Utils.byteArrayToString(liveRxData)
+                // + "] (Current State = " + serialUSBState.name() + ")");
             }
         }
     };
@@ -328,10 +330,10 @@ public class ChameleonDeviceConfig implements ChameleonUSBInterface {
      */
     public static String[] getChameleonMiniUSBDeviceParams() {
         if (chameleonUSBDevice == null) {
-            LibraryLogging.w(TAG, "The chameleon UsbDevice is NULL!");
+            // LibraryLogging.w(TAG, "The chameleon UsbDevice is NULL!");
             return new String[] { "CHAMELEON USBDEVICE STRUCT IS NULL!" };
         } else if (!THE_CHAMELEON_DEVICE.isConfigured()) {
-            LibraryLogging.i(TAG, "The chameleon UsbDevice is NULL!");
+            // LibraryLogging.i(TAG, "The chameleon UsbDevice is NULL!");
             return new String[] { "CHAMELEON DEVICE NOT CONFIGURED!" };
         }
         return new String[] { "USB Vendor ID: " + chameleonUSBDevice.getVendorId(),
@@ -369,7 +371,8 @@ public class ChameleonDeviceConfig implements ChameleonUSBInterface {
         }
         LAST_CHAMELEON_CMD = cmdString;
         if (!chameleonDeviceIsConfigured()) {
-            LibraryLogging.e(TAG, "Chameleon device not configured for command \"" + cmdString + "\"");
+            // LibraryLogging.e(TAG, "Chameleon device not configured for command \"" +
+            // cmdString + "\"");
             return null;
         }
         cmdResult.issuingCmd = cmdString;
@@ -394,7 +397,8 @@ public class ChameleonDeviceConfig implements ChameleonUSBInterface {
             }
         }
         if (serialUSBState == nextSerialUSBState) {
-            LibraryLogging.e(TAG, "Unable to get response for command: \"" + cmdResult.issuingCmd + "\"");
+            // LibraryLogging.e(TAG, "Unable to get response for command: \"" +
+            // cmdResult.issuingCmd + "\"");
             serialUSBState = IDLE;
             cmdResult.isValid = false;
             serialPortLock.release();
@@ -477,7 +481,7 @@ public class ChameleonDeviceConfig implements ChameleonUSBInterface {
 
         String uidTextString = Utils.byteArrayToString(nextUIDBytes);
         ChameleonCommandResult uidSetCmdResult = sendCommandToChameleon(SET_UID, uidTextString);
-        LibraryLogging.i(TAG, "UID Reset to:\n" + uidSetCmdResult.toString());
+        // LibraryLogging.i(TAG, "UID Reset to:\n" + uidSetCmdResult.toString());
         return true;
 
     }
@@ -513,7 +517,7 @@ public class ChameleonDeviceConfig implements ChameleonUSBInterface {
 
         // setup configurations and constants:
         mainApplicationActivity = mainActivity;
-        LibraryLogging.localLoggingLevel = localLoggingLevel;
+        // LibraryLogging.localLoggingLevel = localLoggingLevel;
         THE_CHAMELEON_DEVICE = this;
 
         // permissions we will need to run the service (and in general):
@@ -544,10 +548,11 @@ public class ChameleonDeviceConfig implements ChameleonUSBInterface {
 
     public boolean chameleonUSBInterfaceShutdown() {
         shutdownSerialConnection();
-        if (LibraryLogging.writeLogsToFileOnShutdown) {
-            LibraryLogging.LogEntry.writeLogsToXMLFile();
-            LibraryLogging.LogEntry.writeLogsToPlainTextFile();
-        }
+        /*
+         * if (LibraryLogging.writeLogsToFileOnShutdown) {
+         * LibraryLogging.LogEntry.writeLogsToXMLFile();
+         * LibraryLogging.LogEntry.writeLogsToPlainTextFile(); }
+         */
         usbReceiversRegistered = false;
         return true;
     }
@@ -634,7 +639,7 @@ public class ChameleonDeviceConfig implements ChameleonUSBInterface {
             dumpInputStream.read(uidBytes, 0, uidByteSize);
             return uidBytes;
         } catch (IOException ioe) {
-            LibraryLogging.e(TAG, ioe.getMessage());
+            // LibraryLogging.e(TAG, ioe.getMessage());
             ioe.printStackTrace();
             return null;
         }
@@ -657,7 +662,7 @@ public class ChameleonDeviceConfig implements ChameleonUSBInterface {
                 return true;
             }
         } catch (Exception ioe) {
-            LibraryLogging.e(TAG, "Unable to verify card upload: " + ioe.getMessage());
+            // LibraryLogging.e(TAG, "Unable to verify card upload: " + ioe.getMessage());
             ioe.printStackTrace();
         }
         return false;

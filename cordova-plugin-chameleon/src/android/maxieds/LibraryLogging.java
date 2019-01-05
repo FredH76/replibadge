@@ -120,7 +120,7 @@ public class LibraryLogging {
                             invokingLineNumber)
                     : "");
             logMsgIntent.putExtra("MessageData", logMsgs);
-            //ChameleonDeviceConfig.mainApplicationActivity.onReceiveNewLoggingData(logMsgIntent);
+            // ChameleonDeviceConfig.mainApplicationActivity.onReceiveNewLoggingData(logMsgIntent);
             return logMsgIntent;
         }
 

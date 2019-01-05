@@ -1,6 +1,5 @@
 dependencies {
     compile (name: 'usbserial', ext:'jar')
-    //compile 'com.github.felHR85:UsbSerial:4.5.2'
     compile 'org.apache.commons:commons-lang3:3.4'
     //implementation 'com.github.maxieds:ChameleonMiniUSBInterface:BreadCoStable-2018-09-06'
 }

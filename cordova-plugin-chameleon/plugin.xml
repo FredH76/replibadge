@@ -1,22 +1,49 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-chameleon" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
-    <name>chameleon</name>
+<plugin id="cordova-plugin-chameleon" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>Chameleon</name>
+
+    <!-- define the module name to use in .ts files, and specify the js file that implements exported functions -->
     <js-module name="chameleon" src="www/chameleon.js">
         <clobbers target="cordova.plugins.chameleon" />
     </js-module>
 
     <!-- android -->
     <platform name="android">
-        <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="ChameleonEcho">
-                <param name="android-package" value="com.maxieds.chameleonminiusb.ChameleonEcho"/>
-                <!--<param name="onload" value="true"/>-->
+
+        <!-- define plugin service name to use and java code to execute into android app-->
+        <config-file target="res/xml/config.xml" parent="/*" >
+            <feature name="Chameleon">
+                <param name="android-package" value="com.maxieds.chameleonminiusb.ChameleonPlugin" />
             </feature>
         </config-file>
 
+        <!-- add specific authorisation to enable USB access -->
+        <config-file target="AndroidManifest.xml" parent="/*" >           
+            <!-- These are *EXTREMELY* important as the Chameleon Devices will not interact with the Android phone
+            over serial USB unless these permissions and intents are granted! -->
+            <uses-permission android:name="com.android.example.USB_PERMISSION" android:required="true"/>
+            <uses-feature android:name="android.hardware.usb.host" android:required="true"/> 
+        </config-file>
+        
+        <!-- insert new activity to detect USB connection-->
+        <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
+            <!-- Again, these are *EXTREMELY* important entries to keep in the manifest file for working USB
+            recognition of the devices when they are hotplugged over the phone's USB port: -->
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+                <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            
+            <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/chameleon_usb_device_filter"/>
+            <meta-data android:name="android.hardware.usb.action.USB_DEVICE_DETACHED"
+                android:resource="@xml/chameleon_usb_device_filter"/>      
+        </config-file>
+
         <!-- copy Maxied file (no lib or repo available) -->
-        <source-file src="src/android/maxieds/BuildConfig.java" target-dir="src/com/maxieds/chameleonminiusb" />
-        <source-file src="src/android/maxieds/ChameleonEcho.java" target-dir="src/com/maxieds/chameleonminiusb" />
+        <source-file src="src/android/maxieds/ChameleonPlugin.java" target-dir="src/com/maxieds/chameleonminiusb" />
         <source-file src="src/android/maxieds/ChameleonCommands.java" target-dir="src/com/maxieds/chameleonminiusb" />
         <source-file src="src/android/maxieds/ChameleonDeviceConfig.java" target-dir="src/com/maxieds/chameleonminiusb" />
         <source-file src="src/android/maxieds/ChameleonLibraryLoggingReceiver.java" target-dir="src/com/maxieds/chameleonminiusb" />
@@ -24,13 +51,15 @@
         <source-file src="src/android/maxieds/LibraryLogging.java" target-dir="src/com/maxieds/chameleonminiusb" />
         <source-file src="src/android/maxieds/Utils.java" target-dir="src/com/maxieds/chameleonminiusb" />
         <source-file src="src/android/maxieds/XModem.java" target-dir="src/com/maxieds/chameleonminiusb" />
+
+        <!-- copy ressource file -->
+        <source-file src="src/android/maxieds/res/chameleon_usb_device_filter.xml" target-dir="res/xml" />
         
         <!-- copy fedhf lib files to be compiled (no repo available)-->
         <lib-file src="src/android/usbserial.jar"/>
-        
-        <!-- import repo and compile them -->
-        <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
-       
-    </platform>
 
+        <!-- import other (commons-lang) repo and compile them -->
+        <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
+              
+    </platform>
 </plugin>
