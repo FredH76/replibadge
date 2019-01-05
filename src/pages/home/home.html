@@ -1,14 +1,27 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      RepliBadge
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is mine.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
+  <p text-center>
+    Connect your chameleon device <br>
+    and start magic
+    <br>
+    <br>
   </p>
+  <button ion-button large outline block icon-start (click)="readBadge()">
+    <ion-icon name="log-in"></ion-icon>
+    read badge
+  </button>
+  <br>
+  <button ion-button large outline block icon-start (click)="uploadBadge()">
+    <ion-icon name="log-out"></ion-icon>
+    upload badge
+  </button>
+
+
 </ion-content>
