@@ -1,6 +1,7 @@
 dependencies {
     compile (name: 'usbserial', ext:'jar')
     compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'com.android.support:support-v4:27.+'
     //implementation 'com.github.maxieds:ChameleonMiniUSBInterface:BreadCoStable-2018-09-06'
 }
 
